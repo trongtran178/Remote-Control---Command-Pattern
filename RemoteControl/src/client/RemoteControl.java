@@ -11,8 +11,8 @@ public class RemoteControl {
 	Command[] onCommands;
 
 	Command[] offCommands;
-	
-	//radiobutton tu dinh nghia o day
+
+	// radiobutton tu dinh nghia o day
 	RadioButton[] listRadioOn;
 	RadioButton[] listRadioOff;
 
@@ -56,14 +56,14 @@ public class RemoteControl {
 			offCommands[i] = noCommand;
 			listRadioOn[i] = new RadioButton();
 			listRadioOff[i] = new RadioButton();
-			
+
 		}
 
 		for (int i = 0; i < 7; i++) {
 			listRadioButtonGroup[i] = new ButtonGroup();
 			listRadioOn[i].getRadioButton().setText("On");
 			listRadioOn[i].setIndex(i);
-			
+
 			listRadioOff[i].getRadioButton().setText("Off");
 			listRadioOff[i].setIndex(i);
 			this.listRadioButtonGroup[i].add(listRadioOn[i].getRadioButton());
@@ -89,10 +89,26 @@ public class RemoteControl {
 		int i = 0;
 		for (; i < this.onCommands.length; i++) {
 			if (this.onCommands[i].getClass().getTypeName() == "command.NoCommand") {
-				return i - 1;
+				return i;
 			}
 		}
 		return -1;
+	}
+
+	public Command[] getOnCommands() {
+		return onCommands;
+	}
+
+	public void setOnCommands(Command[] onCommands) {
+		this.onCommands = onCommands;
+	}
+
+	public Command[] getOffCommands() {
+		return offCommands;
+	}
+
+	public void setOffCommands(Command[] offCommands) {
+		this.offCommands = offCommands;
 	}
 
 }

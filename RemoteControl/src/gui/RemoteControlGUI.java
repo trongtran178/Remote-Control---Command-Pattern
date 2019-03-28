@@ -2,8 +2,6 @@ package gui;
 
 import java.awt.EventQueue;
 import java.awt.SystemColor;
-
-import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -12,6 +10,7 @@ import javax.swing.JLabel;
 import java.awt.Color;
 
 import client.RemoteControl;
+import command.NoCommand;
 import concretecommand.LightOffCommand;
 import concretecommand.LightOnCommand;
 import receiver.Light;
@@ -22,7 +21,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import javax.swing.JRadioButton;
+import javax.swing.SwingConstants;
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
+import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.forms.layout.ColumnSpec;
+import com.jgoodies.forms.layout.RowSpec;
+import com.jgoodies.forms.layout.FormSpecs;
 
 public class RemoteControlGUI {
 
@@ -30,17 +36,21 @@ public class RemoteControlGUI {
 	private RemoteControl remoteControl;
 	Light livingRoomLight = new Light("Living room");
 	JPanel panelConcreteCommand;
+	
 	JPanel panelSlotConcreteCommand;
+	
 	JPanel panelRemoteControl;
+	
 	JPanel panelOnOfButton;
 
+	
 	JButton btnCameraDenPhongKhach;
 	JButton btnCameraDenNhaBep;
 	JButton btnCameraGarage;
 	JButton btnCameraDenVuon;
 	JButton btnCameraQuatTran;
 	JButton btnCameraTivi;
-
+	private CameraLivingRoom cameraLivingRoom;
 	/**
 	 * Launch the application.
 	 */
@@ -109,6 +119,9 @@ public class RemoteControlGUI {
 			panelOnOfButton.add(remoteControl.getListRadioOff()[i].getRadioButton());
 		}
 
+		
+		cameraLivingRoom = new CameraLivingRoom();
+		
 		// camera here
 		btnCameraDenPhongKhach = new JButton("Camera ph\u00F2ng kh\u00E1ch");
 		btnCameraDenPhongKhach.setBounds(234, 65, 167, 23);
@@ -137,13 +150,13 @@ public class RemoteControlGUI {
 
 		livingRoomLight.getBtnLight().setText("Đèn phòng khách");
 		livingRoomLight.getBtnLight().setBounds(10, 22, 204, 40);
-		LightOnCommand livingRoomLightOnCommand = new LightOnCommand(livingRoomLight);
-		LightOffCommand livingRoomLightOffCommand = new LightOffCommand(livingRoomLight);
-		remoteControl.setCommand(0, livingRoomLightOnCommand, livingRoomLightOffCommand);
+	
 
-		System.out.println(livingRoomLight.getBtnLight().toString());
+		//System.out.println(livingRoomLight.getBtnLight().toString());
 
 		panelConcreteCommand.add(livingRoomLight.getBtnLight());
+		
+		//panel.remove(1);
 
 		addMouseListenerForEachConcreteCommand();
 		addActionListenerForEachRadioButton();
@@ -156,37 +169,98 @@ public class RemoteControlGUI {
 			public void mousePressed(MouseEvent e) {
 				if (livingRoomLight.isSelectedLight() == false) {
 					livingRoomLight.setSelectedLight(true);
+					livingRoomLight.getBtnLightInRemoteControl().setText("Đèn phòng khách");
+					livingRoomLight.getBtnLightInRemoteControl().setName("livingRoomLight");
+					LightOnCommand livingRoomLightOnCommand = new LightOnCommand(livingRoomLight);
+					LightOffCommand livingRoomLightOffCommand = new LightOffCommand(livingRoomLight);
+					int indexNeedToAddRemote = remoteControl.getIndexOfLastSlot();
+					livingRoomLight.setIndexOfPanelSlotRemoteControl(indexNeedToAddRemote);
+					
+					remoteControl.setCommand(indexNeedToAddRemote, livingRoomLightOnCommand, livingRoomLightOffCommand);
+					panelSlotConcreteCommand.add(livingRoomLight.getBtnLightInRemoteControl());
+					panelSlotConcreteCommand.revalidate();
+					panelSlotConcreteCommand.repaint();
+					System.out.println("chon den phong khach");
+					
 
 				} else {
 					livingRoomLight.setSelectedLight(false);
+					///remoteControl.setCommand(slot, onCommand, offCommand);
+					remoteControl.setCommand(livingRoomLight.getIndexOfPanelSlotRemoteControl(), new NoCommand(), new NoCommand());
+					panelSlotConcreteCommand.remove(livingRoomLight.getBtnLightInRemoteControl());
+					panelSlotConcreteCommand.revalidate();
+					panelSlotConcreteCommand.repaint();
+					//panelSlotConcreteCommand.remove(livingRoomLight);
+					System.out.println("huy chon den phong khach");
 				}
 			}
 		});
-
+		
+		
+		btnCameraDenPhongKhach.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) { 
+				cameraLivingRoom.openCamera();
+				cameraLivingRoom.getFrame().setVisible(true);
+			}
+		});
+		
 	}
 
 	private void addActionListenerForEachRadioButton() {
 
 		for (int i = 0; i < 7; i++) {
 			final int tempIndex = i;
+			
 			this.remoteControl.getListRadioOn()[i].getRadioButton().addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-
-					remoteControl.onButtonWasPushed(tempIndex);
-
-//					System.out.println("Bạn vừa click vào radio button on thứ " + tempIndex);
-
+					//System.out.println(panelSlotConcreteCommand.getComponent(tempIndex).getName());
+						
+					if(panelSlotConcreteCommand.getComponent(tempIndex).getName() == "livingRoomLight") {
+						remoteControl.getOnCommands()[tempIndex].execute();
+						
+						cameraLivingRoom.getFrame().dispose();
+						cameraLivingRoom.setTurnLightOn(true);
+						cameraLivingRoom.openCamera();
+						cameraLivingRoom.getFrame().setVisible(true);;
+						
+					} else { 
+						cameraLivingRoom.getFrame().dispose();
+						cameraLivingRoom.setTurnLightOn(false);
+						cameraLivingRoom.openCamera();
+						cameraLivingRoom.getFrame().setVisible(true);
+						//cameraLivingRoom.getFrame().setVisible(true);
+					}
+//					if(remoteControl.getOnCommands()[tempIndex].getClass().getTypeName() != "command.NoCommand") {
+//						remoteControl.onButtonWasPushed(tempIndex);
+//					} else { 
+//						System.out.println("Chưa gắn thẻ");
+//					}
+						
 				}
 
 			});
 			this.remoteControl.getListRadioOff()[i].getRadioButton().addActionListener(new ActionListener() {
 				@Override
-
 				public void actionPerformed(ActionEvent e) {
-					remoteControl.offButtonWasPushed(tempIndex);
-//					System.out.println("Bạn vừa click vào radio button off thứ " + tempIndex);
-
+//					if(remoteControl.getOffCommands()[tempIndex].getClass().getTypeName() != "command.NoCommand") {
+//						remoteControl.offButtonWasPushed(tempIndex);
+//					} else { 
+//						System.out.println("Chưa gắn thẻ");
+//					}
+					if(panelSlotConcreteCommand.getComponent(tempIndex).getName() == "livingRoomLight") {
+						remoteControl.getOnCommands()[tempIndex].execute();
+						cameraLivingRoom.getFrame().dispose();
+						cameraLivingRoom.setTurnLightOn(false);
+						cameraLivingRoom.openCamera();
+						cameraLivingRoom.getFrame().setVisible(true);;
+					} else { 
+						System.out.println("Chưa gắn thẻ");
+						cameraLivingRoom.setTurnLightOn(false);
+						//cameraLivingRoom.getFrame().revalidate();
+						//cameraLivingRoom.getFrame().repaint();
+					}
+					
 				}
 
 			});

@@ -47,7 +47,9 @@ public class Light {
 	}
 
 	public Light() {
-
+		this.btnLight = new JButton();
+		this.btnLightInRemoteControl = new JButton();
+		this.isSelectedLight = false;
 	}
 
 	public Light(String location) {
