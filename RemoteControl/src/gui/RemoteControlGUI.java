@@ -21,15 +21,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import javax.swing.SwingConstants;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
-import com.jgoodies.forms.layout.FormLayout;
-import com.jgoodies.forms.layout.ColumnSpec;
-import com.jgoodies.forms.layout.RowSpec;
-import com.jgoodies.forms.layout.FormSpecs;
-
 public class RemoteControlGUI {
 
 	private JFrame frame;
@@ -119,7 +110,7 @@ public class RemoteControlGUI {
 		}
 
 		cameraLivingRoom = new CameraLivingRoom();
-
+		cameraLivingRoom.initializeCamera();
 		// camera here
 		btnCameraDenPhongKhach = new JButton("Camera ph\u00F2ng kh\u00E1ch");
 		btnCameraDenPhongKhach.setBounds(234, 65, 167, 23);
@@ -195,7 +186,7 @@ public class RemoteControlGUI {
 
 		btnCameraDenPhongKhach.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
-				cameraLivingRoom.openCamera();
+				cameraLivingRoom.initializeCamera();
 				cameraLivingRoom.getFrame().setVisible(true);
 			}
 		});
@@ -211,13 +202,14 @@ public class RemoteControlGUI {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					// System.out.println(panelSlotConcreteCommand.getComponent(tempIndex).getName());
-
+					System.out.println(tempIndex);
 					if (panelSlotConcreteCommand.getComponent(tempIndex).getName() == "livingRoomLight") {
 						remoteControl.getOnCommands()[tempIndex].execute();
-						if (cameraLivingRoom.getFrame().isShowing() == true) {
+						System.out.println("loi o truoc dong nay");
+						if (cameraLivingRoom.getFrame().isActive() == true) {
 							cameraLivingRoom.getFrame().dispose();
 							cameraLivingRoom.setTurnLightOn(true);
-							cameraLivingRoom.openCamera();
+							cameraLivingRoom.initializeCamera();
 							cameraLivingRoom.getFrame().setVisible(true);
 						} else {
 							cameraLivingRoom.setTurnLightOn(true);
@@ -239,14 +231,14 @@ public class RemoteControlGUI {
 							remoteControl.getOnCommands()[tempIndex].execute();
 							cameraLivingRoom.getFrame().dispose();
 							cameraLivingRoom.setTurnLightOn(false);
-							cameraLivingRoom.openCamera();
+							cameraLivingRoom.initializeCamera();
 							cameraLivingRoom.getFrame().setVisible(true);
-						} else { 
+						} else {
 							cameraLivingRoom.setTurnLightOn(false);
 							cameraLivingRoom.getFrame().revalidate();
 							cameraLivingRoom.getFrame().repaint();
 						}
-						
+
 					} else {
 					}
 

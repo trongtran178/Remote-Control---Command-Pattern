@@ -17,7 +17,7 @@ public class CameraLivingRoom {
 		
 	}
 	
-	public void openCamera() {
+	public void initializeCamera() {
 		initialize();
 	}
 	
