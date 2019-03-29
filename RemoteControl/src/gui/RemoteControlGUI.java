@@ -140,11 +140,8 @@ public class RemoteControlGUI {
 		livingRoomLight.getBtnLight().setText("Đèn phòng khách");
 		livingRoomLight.getBtnLight().setBounds(10, 22, 204, 40);
 
-		// System.out.println(livingRoomLight.getBtnLight().toString());
-
 		panelConcreteCommand.add(livingRoomLight.getBtnLight());
 
-		// panel.remove(1);
 
 		addMouseListenerForEachConcreteCommand();
 		addActionListenerForEachRadioButton();
@@ -205,8 +202,7 @@ public class RemoteControlGUI {
 					System.out.println(tempIndex);
 					if (panelSlotConcreteCommand.getComponent(tempIndex).getName() == "livingRoomLight") {
 						remoteControl.getOnCommands()[tempIndex].execute();
-						System.out.println("loi o truoc dong nay");
-						if (cameraLivingRoom.getFrame().isActive() == true) {
+						if (cameraLivingRoom.getFrame().isShowing() == true) {
 							cameraLivingRoom.getFrame().dispose();
 							cameraLivingRoom.setTurnLightOn(true);
 							cameraLivingRoom.initializeCamera();
