@@ -9,8 +9,41 @@ public class Light {
 	JButton btnLight;
 
 	JButton btnLightInRemoteControl;
-	
+
+	private boolean isSelectedLight;
+
 	private int indexOfPanelSlotRemoteControl;
+
+	public Light() {
+		this.btnLight = new JButton();
+		this.btnLightInRemoteControl = new JButton();
+		this.isSelectedLight = false;
+	}
+
+	public Light(String location) {
+		this.location = location;
+		this.btnLight = new JButton();
+		this.btnLightInRemoteControl = new JButton();
+		this.isSelectedLight = false;
+	}
+
+	// action of receiver
+	public void on() {
+		System.out.println("Turn the light on");
+	}
+
+	// action of receiver
+	public void off() {
+		System.out.println("Turn the light off");
+	}
+
+	public int getIndexOfPanelSlotRemoteControl() {
+		return indexOfPanelSlotRemoteControl;
+	}
+
+	public void setIndexOfPanelSlotRemoteControl(int indexOfPanelSlotRemoteControl) {
+		this.indexOfPanelSlotRemoteControl = indexOfPanelSlotRemoteControl;
+	}
 
 	public JButton getBtnLightInRemoteControl() {
 		return btnLightInRemoteControl;
@@ -19,8 +52,6 @@ public class Light {
 	public void setBtnLightInRemoteControl(JButton btnLightInRemoteControl) {
 		this.btnLightInRemoteControl = btnLightInRemoteControl;
 	}
-
-	private boolean isSelectedLight;
 
 	public boolean isSelectedLight() {
 		return isSelectedLight;
@@ -44,34 +75,5 @@ public class Light {
 
 	public void setLocation(String location) {
 		this.location = location;
-	}
-
-	public Light() {
-		this.btnLight = new JButton();
-		this.btnLightInRemoteControl = new JButton();
-		this.isSelectedLight = false;
-	}
-
-	public Light(String location) {
-		this.location = location;
-		this.btnLight = new JButton();
-		this.btnLightInRemoteControl = new JButton();
-		this.isSelectedLight = false;
-	}
-
-	public void on() {
-		System.out.println("Turn the light on");
-	}
-
-	public void off() {
-		System.out.println("Turn the light off");
-	}
-
-	public int getIndexOfPanelSlotRemoteControl() {
-		return indexOfPanelSlotRemoteControl;
-	}
-
-	public void setIndexOfPanelSlotRemoteControl(int indexOfPanelSlotRemoteControl) {
-		this.indexOfPanelSlotRemoteControl = indexOfPanelSlotRemoteControl;
 	}
 }
