@@ -2,6 +2,8 @@ package gui;
 
 import java.awt.EventQueue;
 import java.awt.SystemColor;
+
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -21,6 +23,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+
 public class RemoteControlGUI {
 
 	private JFrame frame;
@@ -100,10 +103,32 @@ public class RemoteControlGUI {
 		panelRemoteControl.add(panelSlotConcreteCommand);
 		panelSlotConcreteCommand.setLayout(new GridLayout(7, 1, 50, 0));
 
+		JLabel lblNewLabel_1 = new JLabel("labelHoldPosition");
+		panelSlotConcreteCommand.add(lblNewLabel_1);
+
+		JLabel lblNewLabel_2 = new JLabel("labelHoldPosition");
+		panelSlotConcreteCommand.add(lblNewLabel_2);
+
+		JLabel lblNewLabel_3 = new JLabel("labelHoldPosition");
+		panelSlotConcreteCommand.add(lblNewLabel_3);
+
+		JLabel lblNewLabel_4 = new JLabel("labelHoldPosition");
+		panelSlotConcreteCommand.add(lblNewLabel_4);
+
+		JLabel lblNewLabel_5 = new JLabel("labelHoldPosition");
+		panelSlotConcreteCommand.add(lblNewLabel_5);
+
+		JLabel lblNewLabel_6 = new JLabel("labelHoldPosition");
+		panelSlotConcreteCommand.add(lblNewLabel_6);
+
+		JLabel lblNewLabel = new JLabel("labelHoldPosition");
+		panelSlotConcreteCommand.add(lblNewLabel);
+
 		panelOnOfButton = new JPanel();
 		panelOnOfButton.setBounds(195, 57, 110, 322);
 		panelRemoteControl.add(panelOnOfButton);
 		panelOnOfButton.setLayout(new GridLayout(7, 2, 0, 0));
+		// initialize radio on/off button
 		for (int i = 0; i < 7; i++) {
 			panelOnOfButton.add(remoteControl.getListRadioOn()[i].getRadioButton());
 			panelOnOfButton.add(remoteControl.getListRadioOff()[i].getRadioButton());
@@ -142,7 +167,6 @@ public class RemoteControlGUI {
 
 		panelConcreteCommand.add(livingRoomLight.getBtnLight());
 
-
 		addMouseListenerForEachConcreteCommand();
 		addActionListenerForEachRadioButton();
 
@@ -156,13 +180,18 @@ public class RemoteControlGUI {
 					livingRoomLight.setSelectedLight(true);
 					livingRoomLight.getBtnLightInRemoteControl().setText("Đèn phòng khách");
 					livingRoomLight.getBtnLightInRemoteControl().setName("livingRoomLight");
+
 					LightOnCommand livingRoomLightOnCommand = new LightOnCommand(livingRoomLight);
 					LightOffCommand livingRoomLightOffCommand = new LightOffCommand(livingRoomLight);
+
 					int indexNeedToAddRemote = remoteControl.getIndexOfLastSlot();
 					livingRoomLight.setIndexOfPanelSlotRemoteControl(indexNeedToAddRemote);
 
 					remoteControl.setCommand(indexNeedToAddRemote, livingRoomLightOnCommand, livingRoomLightOffCommand);
-					panelSlotConcreteCommand.add(livingRoomLight.getBtnLightInRemoteControl());
+
+					panelSlotConcreteCommand.remove(indexNeedToAddRemote); // remove label hold position
+
+					panelSlotConcreteCommand.add(livingRoomLight.getBtnLightInRemoteControl(), indexNeedToAddRemote);
 					panelSlotConcreteCommand.revalidate();
 					panelSlotConcreteCommand.repaint();
 					System.out.println("chon den phong khach");
@@ -172,10 +201,13 @@ public class RemoteControlGUI {
 					/// remoteControl.setCommand(slot, onCommand, offCommand);
 					remoteControl.setCommand(livingRoomLight.getIndexOfPanelSlotRemoteControl(), new NoCommand(),
 							new NoCommand());
+					int indexNeedToRemove = livingRoomLight.getIndexOfPanelSlotRemoteControl();
+
 					panelSlotConcreteCommand.remove(livingRoomLight.getBtnLightInRemoteControl());
+					JLabel labelHoldPosition = new JLabel("labelHoldPosition");
+					panelSlotConcreteCommand.add(labelHoldPosition, indexNeedToRemove);
 					panelSlotConcreteCommand.revalidate();
 					panelSlotConcreteCommand.repaint();
-					// panelSlotConcreteCommand.remove(livingRoomLight);
 					System.out.println("huy chon den phong khach");
 				}
 			}
@@ -194,23 +226,21 @@ public class RemoteControlGUI {
 
 		for (int i = 0; i < 7; i++) {
 			final int tempIndex = i;
-
 			this.remoteControl.getListRadioOn()[i].getRadioButton().addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					// System.out.println(panelSlotConcreteCommand.getComponent(tempIndex).getName());
 					System.out.println(tempIndex);
+
 					if (panelSlotConcreteCommand.getComponent(tempIndex).getName() == "livingRoomLight") {
 						remoteControl.getOnCommands()[tempIndex].execute();
 						if (cameraLivingRoom.getFrame().isShowing() == true) {
-							cameraLivingRoom.getFrame().dispose();
 							cameraLivingRoom.setTurnLightOn(true);
-							cameraLivingRoom.initializeCamera();
-							cameraLivingRoom.getFrame().setVisible(true);
-						} else {
-							cameraLivingRoom.setTurnLightOn(true);
+							cameraLivingRoom.getLabelImageLivingRoom().setIcon(new ImageIcon(
+									CameraLivingRoom.class.getResource("/image/living-room-light-on.jpeg")));
 							cameraLivingRoom.getFrame().revalidate();
 							cameraLivingRoom.getFrame().repaint();
+						} else {
+							cameraLivingRoom.setTurnLightOn(true);
 						}
 
 					} else {
@@ -223,16 +253,16 @@ public class RemoteControlGUI {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					if (panelSlotConcreteCommand.getComponent(tempIndex).getName() == "livingRoomLight") {
+						remoteControl.getOffCommands()[tempIndex].execute();
 						if (cameraLivingRoom.getFrame().isShowing() == true) {
-							remoteControl.getOnCommands()[tempIndex].execute();
-							cameraLivingRoom.getFrame().dispose();
+
 							cameraLivingRoom.setTurnLightOn(false);
-							cameraLivingRoom.initializeCamera();
-							cameraLivingRoom.getFrame().setVisible(true);
-						} else {
-							cameraLivingRoom.setTurnLightOn(false);
+							cameraLivingRoom.getLabelImageLivingRoom().setIcon(new ImageIcon(
+									CameraLivingRoom.class.getResource("/image/living-room-light-off.jpeg")));
 							cameraLivingRoom.getFrame().revalidate();
 							cameraLivingRoom.getFrame().repaint();
+						} else {
+							cameraLivingRoom.setTurnLightOn(false);
 						}
 
 					} else {
