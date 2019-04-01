@@ -15,6 +15,7 @@ import client.RemoteControl;
 import command.NoCommand;
 import concretecommand.LightOffCommand;
 import concretecommand.LightOnCommand;
+import receiver.GarageDoor;
 import receiver.Light;
 
 import java.awt.Font;
@@ -29,6 +30,9 @@ public class RemoteControlGUI {
 	private JFrame frame;
 	private RemoteControl remoteControl;
 	Light livingRoomLight = new Light("Living room");
+	GarageDoor garage = new GarageDoor();
+	
+	
 	JPanel panelConcreteCommand;
 
 	JPanel panelSlotConcreteCommand;
@@ -44,6 +48,7 @@ public class RemoteControlGUI {
 	JButton btnCameraQuatTran;
 	JButton btnCameraTivi;
 	private CameraLivingRoom cameraLivingRoom;
+	private CameraGarageDoor cameraGarageDoor;
 
 	/**
 	 * Launch the application.
@@ -166,7 +171,7 @@ public class RemoteControlGUI {
 		livingRoomLight.getBtnLight().setBounds(10, 22, 204, 40);
 
 		panelConcreteCommand.add(livingRoomLight.getBtnLight());
-
+		
 		addMouseListenerForEachConcreteCommand();
 		addActionListenerForEachRadioButton();
 
@@ -176,6 +181,7 @@ public class RemoteControlGUI {
 		livingRoomLight.getBtnLight().addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
+				
 				if (livingRoomLight.isSelectedLight() == false) {
 					livingRoomLight.setSelectedLight(true);
 					livingRoomLight.getBtnLightInRemoteControl().setText("Đèn phòng khách");
@@ -212,7 +218,7 @@ public class RemoteControlGUI {
 				}
 			}
 		});
-
+		
 		btnCameraDenPhongKhach.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
 				cameraLivingRoom.initializeCamera();
@@ -235,8 +241,10 @@ public class RemoteControlGUI {
 						remoteControl.getOnCommands()[tempIndex].execute();
 						if (cameraLivingRoom.getFrame().isShowing() == true) {
 							cameraLivingRoom.setTurnLightOn(true);
-							cameraLivingRoom.getLabelImageLivingRoom().setIcon(new ImageIcon(
-									CameraLivingRoom.class.getResource("/image/living-room-light-on.jpeg")));
+							//set the light on
+							cameraLivingRoom.setLightOn();
+//							cameraLivingRoom.getLabelImageLivingRoom().setIcon(new ImageIcon(
+//									CameraLivingRoom.class.getResource("/image/living-room-light-on.jpeg")));
 							cameraLivingRoom.getFrame().revalidate();
 							cameraLivingRoom.getFrame().repaint();
 						} else {
@@ -257,8 +265,10 @@ public class RemoteControlGUI {
 						if (cameraLivingRoom.getFrame().isShowing() == true) {
 
 							cameraLivingRoom.setTurnLightOn(false);
-							cameraLivingRoom.getLabelImageLivingRoom().setIcon(new ImageIcon(
-									CameraLivingRoom.class.getResource("/image/living-room-light-off.jpeg")));
+							//set the light off
+//							cameraLivingRoom.getLabelImageLivingRoom().setIcon(new ImageIcon(
+//									CameraLivingRoom.class.getResource("/image/living-room-light-off.jpeg")));
+							cameraLivingRoom.setLightOff();
 							cameraLivingRoom.getFrame().revalidate();
 							cameraLivingRoom.getFrame().repaint();
 						} else {
