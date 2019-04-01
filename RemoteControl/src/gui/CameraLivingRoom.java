@@ -67,5 +67,18 @@ public class CameraLivingRoom {
 	public void setTurnLightOn(boolean isTurnLightOn) {
 		this.isTurnLightOn = isTurnLightOn;
 	}
+	
+	public void setLightOn() {
+		this.getLabelImageLivingRoom().setIcon(new ImageIcon(CameraLivingRoom.class.getResource("/image/living-room-light-on.jpeg")));
+	}
+	
+	public void setLightOff() {
+		this.getLabelImageLivingRoom().setIcon(new ImageIcon(CameraLivingRoom.class.getResource("/image/living-room-light-off.jpeg")));
+	}
+	
+	
+	
+	
+	
 
 }
