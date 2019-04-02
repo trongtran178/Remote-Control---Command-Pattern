@@ -3,7 +3,6 @@ package gui;
 import java.awt.EventQueue;
 import java.awt.SystemColor;
 
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -31,8 +30,7 @@ public class RemoteControlGUI {
 	private RemoteControl remoteControl;
 	Light livingRoomLight = new Light("Living room");
 	GarageDoor garage = new GarageDoor();
-	
-	
+
 	JPanel panelConcreteCommand;
 
 	JPanel panelSlotConcreteCommand;
@@ -48,7 +46,7 @@ public class RemoteControlGUI {
 	JButton btnCameraQuatTran;
 	JButton btnCameraTivi;
 	private CameraLivingRoom cameraLivingRoom;
-	private CameraGarageDoor cameraGarageDoor;
+	// private CameraGarageDoor cameraGarageDoor;
 
 	/**
 	 * Launch the application.
@@ -108,25 +106,25 @@ public class RemoteControlGUI {
 		panelRemoteControl.add(panelSlotConcreteCommand);
 		panelSlotConcreteCommand.setLayout(new GridLayout(7, 1, 50, 0));
 
-		JLabel lblNewLabel_1 = new JLabel("labelHoldPosition");
+		JLabel lblNewLabel_1 = new JLabel("");
 		panelSlotConcreteCommand.add(lblNewLabel_1);
 
-		JLabel lblNewLabel_2 = new JLabel("labelHoldPosition");
+		JLabel lblNewLabel_2 = new JLabel("");
 		panelSlotConcreteCommand.add(lblNewLabel_2);
 
-		JLabel lblNewLabel_3 = new JLabel("labelHoldPosition");
+		JLabel lblNewLabel_3 = new JLabel("");
 		panelSlotConcreteCommand.add(lblNewLabel_3);
 
-		JLabel lblNewLabel_4 = new JLabel("labelHoldPosition");
+		JLabel lblNewLabel_4 = new JLabel("");
 		panelSlotConcreteCommand.add(lblNewLabel_4);
 
-		JLabel lblNewLabel_5 = new JLabel("labelHoldPosition");
+		JLabel lblNewLabel_5 = new JLabel("");
 		panelSlotConcreteCommand.add(lblNewLabel_5);
 
-		JLabel lblNewLabel_6 = new JLabel("labelHoldPosition");
+		JLabel lblNewLabel_6 = new JLabel("");
 		panelSlotConcreteCommand.add(lblNewLabel_6);
 
-		JLabel lblNewLabel = new JLabel("labelHoldPosition");
+		JLabel lblNewLabel = new JLabel("");
 		panelSlotConcreteCommand.add(lblNewLabel);
 
 		panelOnOfButton = new JPanel();
@@ -171,54 +169,17 @@ public class RemoteControlGUI {
 		livingRoomLight.getBtnLight().setBounds(10, 22, 204, 40);
 
 		panelConcreteCommand.add(livingRoomLight.getBtnLight());
-		
+
 		addMouseListenerForEachConcreteCommand();
 		addActionListenerForEachRadioButton();
 
 	}
 
 	private void addMouseListenerForEachConcreteCommand() {
-		livingRoomLight.getBtnLight().addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent e) {
-				
-				if (livingRoomLight.isSelectedLight() == false) {
-					livingRoomLight.setSelectedLight(true);
-					livingRoomLight.getBtnLightInRemoteControl().setText("Đèn phòng khách");
-					livingRoomLight.getBtnLightInRemoteControl().setName("livingRoomLight");
 
-					LightOnCommand livingRoomLightOnCommand = new LightOnCommand(livingRoomLight);
-					LightOffCommand livingRoomLightOffCommand = new LightOffCommand(livingRoomLight);
+		livingRoomLight.addMouseListenerForButtonLight(livingRoomLight, "Đèn phòng khách", "livingRoomLight",
+				remoteControl, panelSlotConcreteCommand);
 
-					int indexNeedToAddRemote = remoteControl.getIndexOfLastSlot();
-					livingRoomLight.setIndexOfPanelSlotRemoteControl(indexNeedToAddRemote);
-
-					remoteControl.setCommand(indexNeedToAddRemote, livingRoomLightOnCommand, livingRoomLightOffCommand);
-
-					panelSlotConcreteCommand.remove(indexNeedToAddRemote); // remove label hold position
-
-					panelSlotConcreteCommand.add(livingRoomLight.getBtnLightInRemoteControl(), indexNeedToAddRemote);
-					panelSlotConcreteCommand.revalidate();
-					panelSlotConcreteCommand.repaint();
-					System.out.println("chon den phong khach");
-
-				} else {
-					livingRoomLight.setSelectedLight(false);
-					/// remoteControl.setCommand(slot, onCommand, offCommand);
-					remoteControl.setCommand(livingRoomLight.getIndexOfPanelSlotRemoteControl(), new NoCommand(),
-							new NoCommand());
-					int indexNeedToRemove = livingRoomLight.getIndexOfPanelSlotRemoteControl();
-
-					panelSlotConcreteCommand.remove(livingRoomLight.getBtnLightInRemoteControl());
-					JLabel labelHoldPosition = new JLabel("labelHoldPosition");
-					panelSlotConcreteCommand.add(labelHoldPosition, indexNeedToRemove);
-					panelSlotConcreteCommand.revalidate();
-					panelSlotConcreteCommand.repaint();
-					System.out.println("huy chon den phong khach");
-				}
-			}
-		});
-		
 		btnCameraDenPhongKhach.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
 				cameraLivingRoom.initializeCamera();
@@ -237,22 +198,26 @@ public class RemoteControlGUI {
 				public void actionPerformed(ActionEvent e) {
 					System.out.println(tempIndex);
 
+					remoteControl.onButtonWasPushed(tempIndex);
 					if (panelSlotConcreteCommand.getComponent(tempIndex).getName() == "livingRoomLight") {
 						remoteControl.getOnCommands()[tempIndex].execute();
 						if (cameraLivingRoom.getFrame().isShowing() == true) {
 							cameraLivingRoom.setTurnLightOn(true);
-							//set the light on
 							cameraLivingRoom.setLightOn();
-//							cameraLivingRoom.getLabelImageLivingRoom().setIcon(new ImageIcon(
-//									CameraLivingRoom.class.getResource("/image/living-room-light-on.jpeg")));
 							cameraLivingRoom.getFrame().revalidate();
 							cameraLivingRoom.getFrame().repaint();
 						} else {
 							cameraLivingRoom.setTurnLightOn(true);
 						}
 
-					} else {
-						System.out.println(panelSlotConcreteCommand.getComponent(tempIndex).getName());
+					} else if (panelSlotConcreteCommand.getComponent(tempIndex).getName() == "") {
+
+					} else if (panelSlotConcreteCommand.getComponent(tempIndex).getName() == "") {
+
+					} else if (panelSlotConcreteCommand.getComponent(tempIndex).getName() == "") {
+
+					} else if (panelSlotConcreteCommand.getComponent(tempIndex).getName() == "") {
+
 					}
 				}
 
@@ -265,9 +230,6 @@ public class RemoteControlGUI {
 						if (cameraLivingRoom.getFrame().isShowing() == true) {
 
 							cameraLivingRoom.setTurnLightOn(false);
-							//set the light off
-//							cameraLivingRoom.getLabelImageLivingRoom().setIcon(new ImageIcon(
-//									CameraLivingRoom.class.getResource("/image/living-room-light-off.jpeg")));
 							cameraLivingRoom.setLightOff();
 							cameraLivingRoom.getFrame().revalidate();
 							cameraLivingRoom.getFrame().repaint();
@@ -275,7 +237,14 @@ public class RemoteControlGUI {
 							cameraLivingRoom.setTurnLightOn(false);
 						}
 
-					} else {
+					} else if (panelSlotConcreteCommand.getComponent(tempIndex).getName() == "") {
+
+					} else if (panelSlotConcreteCommand.getComponent(tempIndex).getName() == "") {
+
+					} else if (panelSlotConcreteCommand.getComponent(tempIndex).getName() == "") {
+
+					} else if (panelSlotConcreteCommand.getComponent(tempIndex).getName() == "") {
+
 					}
 
 				}
@@ -283,5 +252,37 @@ public class RemoteControlGUI {
 			});
 		}
 
+	}
+
+	public JPanel getPanelConcreteCommand() {
+		return panelConcreteCommand;
+	}
+
+	public void setPanelConcreteCommand(JPanel panelConcreteCommand) {
+		this.panelConcreteCommand = panelConcreteCommand;
+	}
+
+	public JPanel getPanelSlotConcreteCommand() {
+		return panelSlotConcreteCommand;
+	}
+
+	public void setPanelSlotConcreteCommand(JPanel panelSlotConcreteCommand) {
+		this.panelSlotConcreteCommand = panelSlotConcreteCommand;
+	}
+
+	public JPanel getPanelRemoteControl() {
+		return panelRemoteControl;
+	}
+
+	public void setPanelRemoteControl(JPanel panelRemoteControl) {
+		this.panelRemoteControl = panelRemoteControl;
+	}
+
+	public JPanel getPanelOnOfButton() {
+		return panelOnOfButton;
+	}
+
+	public void setPanelOnOfButton(JPanel panelOnOfButton) {
+		this.panelOnOfButton = panelOnOfButton;
 	}
 }
