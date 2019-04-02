@@ -1,6 +1,14 @@
 package receiver;
 
 import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import client.RemoteControl;
+import command.NoCommand;
+import concretecommand.LightOffCommand;
+import concretecommand.LightOnCommand;
 
 public class Light {
 
@@ -27,8 +35,48 @@ public class Light {
 		this.isSelectedLight = false;
 	}
 
+	public void addMouseListenerForButtonLight(Light light, String textOfButton, String nameOfButton, RemoteControl remoteControl,
+			JPanel panelSlotConcreteCommand) {
+		light.getBtnLight().addMouseListener(new MouseAdapter() {
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+				if (light.isSelectedLight == false) {
+					light.setSelectedLight(true);
+					light.getBtnLightInRemoteControl().setText(textOfButton);
+					light.getBtnLightInRemoteControl().setName(nameOfButton);
+
+					LightOnCommand lightOnCommand = new LightOnCommand(light);
+					LightOffCommand lightOffCommand = new LightOffCommand(light);
+					int indexNeedToAddRemote = remoteControl.getIndexNeedToAdd();
+					light.setIndexOfPanelSlotRemoteControl(indexNeedToAddRemote);
+					remoteControl.setCommand(indexNeedToAddRemote, lightOnCommand, lightOffCommand);
+
+					panelSlotConcreteCommand.remove(indexNeedToAddRemote); // remove label hold
+					panelSlotConcreteCommand.add(light.getBtnLightInRemoteControl(), indexNeedToAddRemote);
+					panelSlotConcreteCommand.revalidate();
+					panelSlotConcreteCommand.repaint();
+				} else {
+					light.setSelectedLight(false);
+					remoteControl.setCommand(light.getIndexOfPanelSlotRemoteControl(), new NoCommand(),
+							new NoCommand());
+					int indexNeedToRemove = light.getIndexOfPanelSlotRemoteControl();
+
+					panelSlotConcreteCommand.remove(light.getBtnLightInRemoteControl());
+					JLabel labelHoldPosition = new JLabel(""); // label giữ chỗ
+					panelSlotConcreteCommand.add(labelHoldPosition, indexNeedToRemove);
+					panelSlotConcreteCommand.revalidate();
+					panelSlotConcreteCommand.repaint();
+					System.out.println("huy chon den phong khach");
+				}
+			}
+		});
+	}
+
 	// action of receiver
 	public void on() {
+		
+		//truyen cac tham so de bat den
 		System.out.println("Turn the light on");
 	}
 

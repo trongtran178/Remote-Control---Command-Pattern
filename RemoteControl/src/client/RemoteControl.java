@@ -85,7 +85,7 @@ public class RemoteControl {
 		offCommands[slot].execute();
 	}
 
-	public int getIndexOfLastSlot() {
+	public int getIndexNeedToAdd() {
 		int i = 0;
 		for (; i < this.onCommands.length; i++) {
 			if (this.onCommands[i].getClass().getTypeName() == "command.NoCommand") {
