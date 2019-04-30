@@ -35,8 +35,8 @@ public class Light {
 		this.isSelectedLight = false;
 	}
 
-	public void addMouseListenerForButtonLight(Light light, String textOfButton, String nameOfButton, RemoteControl remoteControl,
-			JPanel panelSlotConcreteCommand) {
+	public void addMouseListenerForButtonLight(Light light, String textOfButton, String nameOfButton,
+			RemoteControl remoteControl, JPanel panelSlotConcreteCommand) {
 		light.getBtnLight().addMouseListener(new MouseAdapter() {
 
 			@Override
@@ -75,8 +75,8 @@ public class Light {
 
 	// action of receiver
 	public void on() {
-		
-		//truyen cac tham so de bat den
+
+		// truyen cac tham so de bat den
 		System.out.println("Turn the light on");
 	}
 

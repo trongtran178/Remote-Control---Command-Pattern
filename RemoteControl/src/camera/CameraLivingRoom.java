@@ -1,7 +1,5 @@
 package camera;
 
-
-
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -37,7 +35,6 @@ public class CameraLivingRoom {
 					.setIcon(new ImageIcon(CameraLivingRoom.class.getResource("image/living-room-light-off.jpeg")));
 		}
 		labelImageLivingRoom.setBounds(0, 0, 800, 532);
-		// labelImageLivingRoom.imageUpdate(img, infoflags, x, y, w, h)
 		frame.getContentPane().add(labelImageLivingRoom);
 	}
 
