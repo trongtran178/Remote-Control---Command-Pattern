@@ -7,13 +7,13 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import client.RemoteControl;
 import command.Command;
 import command.NoCommand;
 import concretecommand.CeilingFanHighCommand;
 import concretecommand.CeilingFanLowCommand;
 import concretecommand.CeilingFanMediumCommand;
 import concretecommand.CeilingFanOffComand;
+import invoker.RemoteControl;
 
 public class CeilingFan {
 

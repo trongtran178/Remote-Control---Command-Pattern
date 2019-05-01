@@ -5,10 +5,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import client.RemoteControl;
+
 import command.NoCommand;
 import concretecommand.LightOffCommand;
 import concretecommand.LightOnCommand;
+import invoker.RemoteControl;
 
 public class Light {
 

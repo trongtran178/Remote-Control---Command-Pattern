@@ -6,11 +6,13 @@ import java.awt.SystemColor;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+
+import invoker.RemoteControl;
+
 import javax.swing.JLabel;
 
 import java.awt.Color;
 
-import client.RemoteControl;
 import receiver.CeilingFan;
 import receiver.GarageDoor;
 import receiver.Light;
