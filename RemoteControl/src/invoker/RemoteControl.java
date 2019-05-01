@@ -1,4 +1,4 @@
-package client;
+package invoker;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JRadioButton;

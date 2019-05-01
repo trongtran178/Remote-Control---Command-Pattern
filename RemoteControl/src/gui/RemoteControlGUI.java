@@ -6,11 +6,13 @@ import java.awt.SystemColor;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+
+import invoker.RemoteControl;
+
 import javax.swing.JLabel;
 
 import java.awt.Color;
 
-import client.RemoteControl;
 import receiver.CeilingFan;
 import receiver.GarageDoor;
 import receiver.Light;
@@ -27,9 +29,11 @@ public class RemoteControlGUI {
 	private JFrame frame;
 	private RemoteControl remoteControl;
 	Light livingRoomLight = new Light("Living room");
+	Light kitchenRoomLight = new Light("Kitchen room");
 	CeilingFan ceilingFanWithHighSpeed = new CeilingFan();
 	CeilingFan ceilingFanWithMediumSpeed = new CeilingFan();
 	CeilingFan ceilingFanWithLowSpeed = new CeilingFan();
+
 	GarageDoor garage = new GarageDoor();
 
 	JPanel panelConcreteCommand;
@@ -47,6 +51,7 @@ public class RemoteControlGUI {
 	JButton btnCameraQuatTran;
 	JButton btnCameraTivi;
 	private CameraLivingRoom cameraLivingRoom;
+	private CameraKitchenRoom cameraKitchenRoom;
 	private CameraCeilingFan cameraCeilingFan;
 	// private CameraGarageDoor cameraGarageDoor;
 
@@ -141,6 +146,10 @@ public class RemoteControlGUI {
 
 		cameraLivingRoom = new CameraLivingRoom();
 		cameraLivingRoom.initializeCamera();
+
+		cameraKitchenRoom = new CameraKitchenRoom();
+		cameraKitchenRoom.initializeCamera();
+
 		cameraCeilingFan = new CameraCeilingFan();
 		cameraCeilingFan.initializeCamera();
 
@@ -175,20 +184,24 @@ public class RemoteControlGUI {
 
 		panelConcreteCommand.add(livingRoomLight.getBtnLight());
 
+		kitchenRoomLight.getBtnLight().setText("Đèn nhà bếp");
+		kitchenRoomLight.getBtnLight().setBounds(10, 72, 204, 40);
+
+		panelConcreteCommand.add(kitchenRoomLight.getBtnLight());
+
 		ceilingFanWithHighSpeed.getBtnCeilingFan().setText("Quạt trần - số 3");
-		ceilingFanWithHighSpeed.getBtnCeilingFan().setBounds(10, 72, 204, 40);
+		ceilingFanWithHighSpeed.getBtnCeilingFan().setBounds(10, 122, 204, 40);
 
 		panelConcreteCommand.add(ceilingFanWithHighSpeed.getBtnCeilingFan());
-		
+
 		ceilingFanWithMediumSpeed.getBtnCeilingFan().setText("Quạt trần - số 2");
-		ceilingFanWithMediumSpeed.getBtnCeilingFan().setBounds(10, 122, 204, 40);
+		ceilingFanWithMediumSpeed.getBtnCeilingFan().setBounds(10, 172, 204, 40);
 		panelConcreteCommand.add(ceilingFanWithMediumSpeed.getBtnCeilingFan());
-		
+
 		ceilingFanWithLowSpeed.getBtnCeilingFan().setText("Quạt trần - số 1");
-		ceilingFanWithLowSpeed.getBtnCeilingFan().setBounds(10, 172, 204, 40);
+		ceilingFanWithLowSpeed.getBtnCeilingFan().setBounds(10, 222, 204, 40);
 		panelConcreteCommand.add(ceilingFanWithLowSpeed.getBtnCeilingFan());
-		
-		
+
 		addMouseListenerForEachConcreteCommand();
 		addActionListenerForEachRadioButton();
 
@@ -199,12 +212,15 @@ public class RemoteControlGUI {
 		livingRoomLight.addMouseListenerForButtonLight(livingRoomLight, "Đèn phòng khách", "livingRoomLight",
 				remoteControl, panelSlotConcreteCommand);
 
+		kitchenRoomLight.addMouseListenerForButtonLight(kitchenRoomLight, "Đèn nhà bếp", "kitchenRoomLight",
+				remoteControl, panelSlotConcreteCommand);
+
 		ceilingFanWithHighSpeed.addMouseListenerForButtonCeilingFan(ceilingFanWithHighSpeed, CeilingFan.HIGH,
 				"Quạt trần - số 3", "ceilingFanWithHighSpeed", remoteControl, panelSlotConcreteCommand);
-		
+
 		ceilingFanWithMediumSpeed.addMouseListenerForButtonCeilingFan(ceilingFanWithMediumSpeed, CeilingFan.MEDIUM,
 				"Quạt trần - số 2", "ceilingFanWithMediumSpeed", remoteControl, panelSlotConcreteCommand);
-		
+
 		ceilingFanWithLowSpeed.addMouseListenerForButtonCeilingFan(ceilingFanWithLowSpeed, CeilingFan.LOW,
 				"Quạt trần - số 1", "ceilingFanWithMediumSpeed", remoteControl, panelSlotConcreteCommand);
 
@@ -217,6 +233,17 @@ public class RemoteControlGUI {
 
 			}
 		});
+
+		btnCameraDenNhaBep.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				if (cameraKitchenRoom.getFrame().isVisible() == true) {
+					return;
+				}
+				cameraKitchenRoom.initializeCamera();
+				cameraKitchenRoom.getFrame().setVisible(true);
+			}
+		});
+
 		btnCameraQuatTran.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
 				if (cameraCeilingFan.getFrame().isVisible() == true)
@@ -239,7 +266,7 @@ public class RemoteControlGUI {
 					System.out.println(tempIndex);
 
 					remoteControl.onButtonWasPushed(tempIndex);
-					
+
 					// ĐÈN PHÒNG KHÁCH
 					if (panelSlotConcreteCommand.getComponent(tempIndex).getName() == "livingRoomLight") {
 						remoteControl.getOnCommands()[tempIndex].execute();
@@ -252,9 +279,22 @@ public class RemoteControlGUI {
 							cameraLivingRoom.setTurnLightOn(true);
 						}
 
-					} 
-					
-					//QUẠT TRẦN - SÔ 3
+					}
+
+					// ĐÈN NHÀ BẾP
+					else if (panelSlotConcreteCommand.getComponent(tempIndex).getName() == "kitchenRoomLight") {
+						remoteControl.getOnCommands()[tempIndex].execute();
+						if (cameraKitchenRoom.getFrame().isShowing() == true) {
+							cameraKitchenRoom.setTurnLightOn(true);
+							cameraKitchenRoom.setLightOn();
+							cameraKitchenRoom.getFrame().revalidate();
+							cameraKitchenRoom.getFrame().repaint();
+						} else {
+							cameraKitchenRoom.setTurnLightOn(true);
+						}
+					}
+
+					// QUẠT TRẦN - SÔ 3
 					else if (panelSlotConcreteCommand.getComponent(tempIndex).getName() == "ceilingFanWithHighSpeed") {
 						remoteControl.getOnCommands()[tempIndex].execute();
 						if (cameraCeilingFan.getFrame().isShowing() == true) {
@@ -265,9 +305,10 @@ public class RemoteControlGUI {
 							cameraCeilingFan.setCeilingFanHigh();
 						}
 					}
-					
-					//QUẠT TRẦN - SỐ 2 - MEDIUM
-					else if (panelSlotConcreteCommand.getComponent(tempIndex).getName() == "ceilingFanWithMediumSpeed") {
+
+					// QUẠT TRẦN - SỐ 2 - MEDIUM
+					else if (panelSlotConcreteCommand.getComponent(tempIndex)
+							.getName() == "ceilingFanWithMediumSpeed") {
 						remoteControl.getOnCommands()[tempIndex].execute();
 						if (cameraCeilingFan.getFrame().isShowing() == true) {
 							cameraCeilingFan.setCeilingFanMedium();
@@ -276,9 +317,9 @@ public class RemoteControlGUI {
 						} else {
 							cameraCeilingFan.setCeilingFanMedium();
 						}
-					} 
-					
-					//QUẠT TRẦN - SÔ 1 - LOW
+					}
+
+					// QUẠT TRẦN - SÔ 1 - LOW
 					else if (panelSlotConcreteCommand.getComponent(tempIndex).getName() == "ceilingFanWithLowSpeed") {
 						remoteControl.getOnCommands()[tempIndex].execute();
 						if (cameraCeilingFan.getFrame().isShowing() == true) {
@@ -309,8 +350,22 @@ public class RemoteControlGUI {
 							cameraLivingRoom.setTurnLightOn(false);
 						}
 
-					} else if (panelSlotConcreteCommand.getComponent(tempIndex)
-							.getName() == "ceilingFanWithHighSpeed") {
+					} else if (panelSlotConcreteCommand.getComponent(tempIndex).getName() == "kitchenRoomLight") {
+						remoteControl.getOffCommands()[tempIndex].execute();
+						{
+							if (cameraKitchenRoom.getFrame().isShowing() == true) {
+
+								cameraKitchenRoom.setTurnLightOn(false);
+								cameraKitchenRoom.setLightOff();
+								cameraKitchenRoom.getFrame().revalidate();
+								cameraKitchenRoom.getFrame().repaint();
+							} else {
+								cameraKitchenRoom.setTurnLightOn(false);
+							}
+						}
+					}
+
+					else if (panelSlotConcreteCommand.getComponent(tempIndex).getName() == "ceilingFanWithHighSpeed") {
 
 						if (cameraCeilingFan.getFrame().isShowing() == true) {
 							cameraCeilingFan.setCeilingFanOff();
@@ -320,7 +375,8 @@ public class RemoteControlGUI {
 							cameraCeilingFan.setCeilingFanOff();
 						}
 
-					} else if (panelSlotConcreteCommand.getComponent(tempIndex).getName() == "ceilingFanWithMediumSpeed") {
+					} else if (panelSlotConcreteCommand.getComponent(tempIndex)
+							.getName() == "ceilingFanWithMediumSpeed") {
 						if (cameraCeilingFan.getFrame().isShowing() == true) {
 							cameraCeilingFan.setCeilingFanOff();
 							cameraCeilingFan.getFrame().revalidate();
@@ -336,8 +392,7 @@ public class RemoteControlGUI {
 						} else {
 							cameraCeilingFan.setCeilingFanOff();
 						}
-						
-						
+
 					} else if (panelSlotConcreteCommand.getComponent(tempIndex).getName() == "") {
 
 					}

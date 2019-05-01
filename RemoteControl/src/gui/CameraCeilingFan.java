@@ -74,21 +74,25 @@ public class CameraCeilingFan {
 	}
 
 	public void setCeilingFanHigh() {
+		this.setSpeed(HIGH);
 		this.labelImageCeilingFan
 				.setIcon(new ImageIcon(CameraCeilingFan.class.getResource("/image/ceiling-fan-high.gif")));
 	}
 
 	public void setCeilingFanMedium() {
+		this.setSpeed(MEDIUM);
 		this.labelImageCeilingFan
 				.setIcon(new ImageIcon(CameraCeilingFan.class.getResource("/image/ceiling-fan-medium.gif")));
 	}
 
 	public void setCeilingFanLow() {
+		this.setSpeed(LOW);
 		this.labelImageCeilingFan
 				.setIcon(new ImageIcon(CameraCeilingFan.class.getResource("/image/ceiling-fan-low.gif")));
 	}
 
 	public void setCeilingFanOff() {
+		this.setSpeed(OFF);
 		this.labelImageCeilingFan
 				.setIcon(new ImageIcon(CameraCeilingFan.class.getResource("/image/ceiling-fan-off.gif")));
 	}
